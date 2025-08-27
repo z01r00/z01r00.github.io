@@ -1,0 +1,765 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 统一分析和跟踪脚本 -->
+    <script src="js/analytics.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Sprunki Incredibox Game Online | Rock Your Beat</title>
+    <meta name="description" content="Experience Sprunki, a revolutionary music game where digital beats meet viral infection. Create, spread, and evolve your musical patterns in this unique rhythm experience.">
+    <link rel="icon" type="image/png" href="1.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+        
+        :root {
+            --neon-text-color: #f40;
+            --neon-border-color: #08f;
+        }
+        
+        body {
+            font-family: 'Audiowide', cursive;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-text-color);
+        }
+        .hero {
+            background: url('https://source.unsplash.com/random/1600x900?concert') no-repeat center center;
+            background-size: cover;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1;
+        }
+        .hero h1 {
+            position: relative;
+            z-index: 2;
+            font-size: 3em;
+            animation: gentleGlow 4s ease-in-out infinite alternate;
+        }
+        @keyframes gentleGlow {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-text-color);
+            }
+            to {
+                text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-text-color), 0 0 15px var(--neon-border-color);
+            }
+        }
+        .game-container {
+            width: 100%;
+            height: 600px;
+            margin: 20px 0;
+            border: 4px solid var(--neon-border-color);
+            box-shadow: 0 0 20px var(--neon-border-color);
+            animation: borderPulse 2s infinite;
+            position: relative;
+            background: #000;
+        }
+        @keyframes borderPulse {
+            0% { box-shadow: 0 0 20px var(--neon-border-color); }
+            50% { box-shadow: 0 0 40px var(--neon-border-color), 0 0 60px var(--neon-border-color); }
+            100% { box-shadow: 0 0 20px var(--neon-border-color); }
+        }
+        .game-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            background: #000;
+        }
+        .game-container.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw !important;
+            height: 100vh !important;
+            margin: 0;
+            padding: 0;
+            z-index: 9999;
+            border: none;
+            background: #000;
+        }
+        .game-container.fullscreen iframe {
+            width: 100vw !important;
+            height: 100vh !important;
+            border: none;
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #000;
+        }
+        .section {
+            background-color: rgba(20, 20, 20, 0.8);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 2px solid var(--neon-border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 20px,
+                rgba(255, 255, 255, 0.1) 20px,
+                rgba(255, 255, 255, 0.1) 40px
+            );
+            animation: moveLines 10s linear infinite;
+        }
+        @keyframes moveLines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(40px); }
+        }
+        .section:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px var(--neon-border-color);
+        }
+        .review {
+            background-color: rgba(40, 40, 40, 0.8);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 3px solid var(--neon-text-color);
+        }
+        .faq {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .faq h3 {
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .faq h3:hover {
+            color: var(--neon-text-color);
+        }
+        .faq p {
+            display: none;
+            padding-left: 20px;
+            border-left: 2px solid var(--neon-text-color);
+        }
+        @media (max-width: 768px) {
+            .game-container {
+                height: 400px;
+            }
+            .hero h1 {
+                font-size: 2em;
+            }
+        }
+        
+        /* 超级酷炫面包屑样式 */
+        .breadcrumb-container {
+            perspective: 1000px;
+            margin-bottom: 40px;
+        }
+        .breadcrumb {
+            background: linear-gradient(90deg, #00ff87, #60efff, #00ff87);
+            background-size: 200% 200%;
+            padding: 20px 30px;
+            border-radius: 10px;
+            font-size: 20px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2), 0 0 50px rgba(0,255,135,0.6);
+            display: inline-block;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            animation: gradientShift 5s ease infinite, float 3s ease-in-out infinite;
+        }
+        .breadcrumb:hover {
+            transform: rotateX(10deg) rotateY(-10deg) scale(1.05);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.3), 0 0 70px rgba(0,255,135,0.8);
+        }
+        .breadcrumb a {
+            color: #001f3f;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            text-shadow: 0 0 10px rgba(255,255,255,0.7);
+            display: inline-block;
+        }
+        .breadcrumb a:hover {
+            color: #ff00ff;
+            text-shadow: 0 0 15px rgba(255,0,255,0.8);
+            transform: translateZ(20px);
+        }
+        .breadcrumb a::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            bottom: -5px;
+            left: 0;
+            background-color: #ff00ff;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .breadcrumb a:hover::before {
+            transform: scaleX(1);
+        }
+        .breadcrumb .separator {
+            margin: 0 15px;
+            color: #001f3f;
+            font-weight: bold;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .breadcrumb:hover .separator {
+            transform: rotate(360deg) scale(1.2);
+        }
+        .breadcrumb .current {
+            color: #ff00ff;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(255,0,255,0.8);
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* 在 <style> 标签内添加以下 CSS */
+        .neon-nav {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .neon-nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .neon-nav li {
+            margin: 0 15px;
+        }
+
+        .neon-nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .neon-nav a:hover {
+            color: var(--neon-text-color);
+            text-shadow: 0 0 5px var(--neon-text-color), 0 0 10px var(--neon-text-color);
+        }
+        .new-label {
+            background-color: #f40;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            position: absolute;
+            top: -10px;
+            right: -20px;
+            animation: pulse 2s infinite;
+            z-index: 2;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .nav-item {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* 添加响应式导航样式 */
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            padding: 10px;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            z-index: 100;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--neon-text-color);
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        @media screen and (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .neon-nav ul {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.95);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin: 0;
+                padding: 20px;
+                z-index: 99;
+            }
+
+            .neon-nav ul.active {
+                display: flex;
+            }
+
+            .neon-nav li {
+                margin: 15px 0;
+                display: block;
+                text-align: center;
+            }
+
+            .new-label {
+                position: static;
+                display: inline-block;
+                margin-left: 8px;
+                vertical-align: middle;
+            }
+        }
+
+        /* Add fullscreen button styles */
+        .fullscreen-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--neon-border-color);
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .fullscreen-btn i {
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            box-shadow: 0 0 10px var(--neon-border-color);
+            transform: scale(1.1);
+        }
+
+        .fullscreen-btn:hover i {
+            color: var(--neon-text-color);
+        }
+
+        @media screen and (max-width: 768px) {
+            .fullscreen-btn {
+                width: 50px;
+                height: 50px;
+            }
+            .fullscreen-btn i {
+                font-size: 22px;
+            }
+            .game-container.fullscreen {
+                position: fixed;
+                width: 100% !important;
+                height: 100% !important;
+            }
+            .game-container.fullscreen iframe {
+                width: 100% !important;
+                height: 100% !important;
+            }
+            .game-container.fullscreen .fullscreen-btn {
+                z-index: 10000;
+            }
+        }
+
+        body.fullscreen-active {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9HPYLRHXRJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9HPYLRHXRJ');
+</script>
+
+
+<body>
+    <!-- 在 <body> 标签内的顶部添加以下代码 -->
+    <nav class="neon-nav">
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="music-games.html">Music Games</a></li>
+            <li class="nav-item"><a href="https://stimulationclicker.club/">Stimulation Clicker<span class="new-label">NEW</span></a></li>
+            <li class="nav-item"><a href="games/sprunki-phase-70.html">Phase 70<span class="new-label">NEW</span></a></li>
+            <li class="nav-item"><a href="games/sprunki-definitive-phase-11.html">Definitive Phase 11<span class="new-label">NEW</span></a></li>
+            <li class="nav-item"><a href="games/sprunki-sprunkilairity.html">Sprunkilairity<span class="new-label">NEW</span></a></li>
+            <li class="nav-item"><a href="games/sprunki-interactive.html">Interactive<span class="new-label">NEW</span></a></li>
+        </ul>
+    </nav>
+
+    <div class="hero">
+            <h1>Sprunki Incredibox: Rock Your Beat!</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="game-container">
+            <button class="fullscreen-btn" aria-label="Toggle fullscreen">
+                <i class="fas fa-expand"></i>
+            </button>
+            <iframe src="https://game.sprunki-game.online/sprunki.html" allow="fullscreen" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+        </div>
+
+        <div class="section">
+            <h2>Unleash Your Inner Rockstar with Sprunki Incredibox</h2>
+            <ol>
+                <li>Click on the Sprunki characters to add epic beats to your mix</li>
+                <li>Each Sprunki character drops a unique sound or rhythm</li>
+                <li>Experiment with different Sprunki combos to create your chart-topping hit</li>
+                <li>Use the Incredibox controls to record, save, or share your Sprunki masterpiece</li>
+                <li>Discover hidden Sprunki Incredibox bonuses to unlock legendary performances</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>Sprunki Incredibox: Rocking the Music World</h2>
+            <div class="review">
+                <h3>Sprunki Incredibox: A Musical Revolution!</h3>
+                <p>"Sprunki Incredibox is like having a full band at your fingertips. It's addictive, it's creative, it's pure musical madness!" - RockGod101</p>
+            </div>
+            <div class="review">
+                <h3>Endless Sprunki Incredibox Jams</h3>
+                <p>"I've created more Sprunki beats than I can count. It's my go-to app for unleashing creativity and starting impromptu dance parties!" - BeatMasterFlex</p>
+            </div>
+            <div class="review">
+                <h3>Sprunki Incredibox: The New-Age Instrument</h3>
+                <p>"Move over, guitar! Sprunki Incredibox is the coolest way to make music. My kids are obsessed, and I'm not far behind!" - RockMom2023</p>
+            </div>
+            <div class="review">
+                <h3>Sprunki Incredibox: A Game-Changer for Music Lovers</h3>
+                <p>"I never thought I could make music until I discovered Sprunki Incredibox. Now I'm mixing beats like a pro!" - NoviceTurnedPro</p>
+            </div>
+            <div class="review">
+                <h3>Sprunki Incredibox: The Ultimate Party Starter</h3>
+                <p>"Every hangout turns into a jam session with Sprunki Incredibox. It's impossible not to have fun with this app!" - PartyAnimal99</p>
+            </div>
+            <div class="review">
+                <h3>Sprunki Incredibox: A Creative Playground</h3>
+                <p>"As a music teacher, I can't praise Sprunki Incredibox enough. It's an incredible tool for teaching rhythm and composition." - MusicEduPro</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Sprunki Incredibox FAQs: All You Need to Know</h2>
+            <div class="faq">
+                <h3>What makes Sprunki Incredibox so awesome?</h3>
+                <p>Sprunki Incredibox is the ultimate online music creation game where you mix killer beats and sounds using rad animated characters. It's like being a DJ, producer, and rock star all at once!</p>
+            </div>
+            <div class="faq">
+                <h3>Do I need to break the bank to play Sprunki Incredibox?</h3>
+                <p>No way! Sprunki Incredibox is totally free to play online. Rock on without spending a dime!</p>
+            </div>
+            <div class="faq">
+                <h3>Can I save my epic Sprunki Incredibox creations?</h3>
+                <p>Absolutely! Save your Sprunki Incredibox mixes and share them with the world. Who knows, you might go viral!</p>
+            </div>
+            <div class="faq">
+                <h3>Are there different flavors of Sprunki Incredibox?</h3>
+                <p>You bet! Sprunki Incredibox comes in various themes and versions, each with its own unique characters and sounds. It's like having multiple albums in one game!</p>
+            </div>
+            <div class="faq">
+                <h3>Do I need to be the next Mozart to play Sprunki Incredibox?</h3>
+                <p>Not at all! Sprunki Incredibox is designed for everyone, from total newbies to music pros. Just jump in and let your creativity flow!</p>
+            </div>
+            <div class="faq">
+                <h3>Can I rock Sprunki Incredibox on my phone?</h3>
+                <p>You sure can! Sprunki Incredibox is optimized for both desktop and mobile play. Make music anywhere, anytime!</p>
+            </div>
+            <div class="faq">
+                <h3>How often does Sprunki Incredibox drop new content?</h3>
+                <p>The Sprunki Incredibox team is always working on fresh beats. They regularly update the game with new sounds, characters, and features to keep your music-making experience exciting!</p>
+            </div>
+            <div class="faq">
+                <h3>Can Sprunki Incredibox make me cool in school?</h3>
+                <p>Definitely! Sprunki Incredibox is not just fun, it's a great tool for teaching music concepts and boosting creativity in classrooms. You might just become the coolest kid (or teacher) in school!</p>
+            </div>
+            <div class="faq">
+                <h3>What's the story behind Sprunki Incredibox?</h3>
+                <p>Sprunki Incredibox is a unique spin-off of the popular Incredibox game, featuring spunky characters and fresh beats. It's the result of creative minds wanting to bring more funk and attitude to the music-making experience!</p>
+            </div>
+            <div class="faq">
+                <h3>Can I collaborate with friends using Sprunki Incredibox?</h3>
+                <p>While Sprunki Incredibox doesn't have a direct collaboration feature, you can share your creations and challenge friends to remix them. It's a great way to spark musical conversations and friendly competition!</p>
+            </div>
+            <div class="faq">
+                <h3>Are there any Sprunki Incredibox tournaments or competitions?</h3>
+                <p>Yes! The Sprunki Incredibox community often organizes online beat-making contests. Keep an eye on the official website and social media channels for announcements about upcoming Sprunki Incredibox events!</p>
+            </div>
+            <div class="faq">
+                <h3>How does Sprunki Incredibox help in music education?</h3>
+                <p>Sprunki Incredibox is a fantastic tool for teaching rhythm, harmony, and composition. It makes complex musical concepts accessible and fun, allowing students to experiment with different sounds and structures in a playful environment.</p>
+            </div>
+            <div class="faq">
+                <h3>Can I use my Sprunki Incredibox creations in my own projects?</h3>
+                <p>While Sprunki Incredibox is primarily for personal enjoyment, you can reach out to the developers for permission to use your creations in personal projects. Always respect copyright and give credit to Sprunki Incredibox when sharing your mixes!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.faq h3').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+    </script>
+
+    <script>
+    document.querySelector('.breadcrumb').addEventListener('mousemove', (e) => {
+        const breadcrumb = e.currentTarget;
+        const rect = breadcrumb.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = (y - centerY) / 10;
+        const rotateY = (centerX - x) / 10;
+        
+        breadcrumb.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    </script>
+
+    <footer class="footer">
+        <style>
+            .footer {
+                background: rgba(0,0,0,0.9);
+                padding: 30px 0;
+                margin-top: 50px;
+                border-top: 2px solid var(--neon-border-color);
+            }
+            .footer-content {
+                max-width: 1200px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 30px;
+                padding: 0 20px;
+            }
+            .footer a {
+                color: #fff;
+                text-decoration: none;
+                padding: 8px 15px;
+                border-radius: 5px;
+                transition: all 0.3s ease;
+                border: 1px solid transparent;
+            }
+            .footer a:hover {
+                border-color: var(--neon-text-color);
+                text-shadow: 0 0 5px var(--neon-text-color);
+                box-shadow: 0 0 10px var(--neon-text-color);
+            }
+        </style>
+        <div class="footer-content">
+            <a href="blog.html">Blog</a>
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-of-service.html">Terms of Service</a>
+        </div>
+    </footer>
+
+    <script>
+        // 添加移动端菜单切换功能
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.neon-nav ul').classList.toggle('active');
+            
+            // 添加汉堡按钮动画
+            const spans = this.querySelectorAll('span');
+            if (this.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
+        });
+
+        // 点击导航链接后关闭菜单
+        document.querySelectorAll('.neon-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.neon-nav ul').classList.remove('active');
+                document.querySelector('.menu-toggle').classList.remove('active');
+                const spans = document.querySelectorAll('.menu-toggle span');
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            });
+        });
+
+        // 全屏功能
+        const fullscreenBtn = document.querySelector('.fullscreen-btn');
+        const gameContainer = document.querySelector('.game-container');
+        const gameIframe = gameContainer.querySelector('iframe');
+        const fullscreenIcon = fullscreenBtn.querySelector('i');
+        const body = document.querySelector('body');
+
+        function toggleFullScreen() {
+            // 检查是否支持原生全屏
+            const nativeFullscreenSupported = document.fullscreenEnabled || 
+                document.webkitFullscreenEnabled || 
+                document.mozFullScreenEnabled || 
+                document.msFullscreenEnabled;
+
+            // 如果是移动设备或不支持原生全屏，使用CSS全屏
+            if (!nativeFullscreenSupported || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                gameContainer.classList.toggle('fullscreen');
+                body.classList.toggle('fullscreen-active');
+                fullscreenIcon.className = gameContainer.classList.contains('fullscreen') ? 'fas fa-compress' : 'fas fa-expand';
+                
+                if (gameContainer.classList.contains('fullscreen')) {
+                    const height = window.innerHeight;
+                    gameContainer.style.height = height + 'px';
+                    gameIframe.style.height = height + 'px';
+                } else {
+                    gameContainer.style.height = '600px';
+                    gameIframe.style.height = '100%';
+                }
+                return;
+            }
+
+            // 桌面设备使用原生全屏
+            if (!document.fullscreenElement && 
+                !document.webkitFullscreenElement && 
+                !document.mozFullScreenElement && 
+                !document.msFullscreenElement) {
+                
+                if (gameIframe.requestFullscreen) {
+                    gameIframe.requestFullscreen();
+                } else if (gameIframe.webkitRequestFullscreen) {
+                    gameIframe.webkitRequestFullscreen();
+                } else if (gameIframe.mozRequestFullScreen) {
+                    gameIframe.mozRequestFullScreen();
+                } else if (gameIframe.msRequestFullscreen) {
+                    gameIframe.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        fullscreenBtn.addEventListener('click', toggleFullScreen);
+
+        // 监听全屏变化
+        document.addEventListener('fullscreenchange', updateFullscreenIcon);
+        document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
+        document.addEventListener('mozfullscreenchange', updateFullscreenIcon);
+        document.addEventListener('MSFullscreenChange', updateFullscreenIcon);
+
+        function updateFullscreenIcon() {
+            const isFullscreen = document.fullscreenElement || 
+                document.webkitFullscreenElement || 
+                document.mozFullScreenElement || 
+                document.msFullscreenElement || 
+                gameContainer.classList.contains('fullscreen');
+            
+            fullscreenIcon.className = isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
+        }
+
+        // 处理移动端方向变化
+        window.addEventListener('orientationchange', function() {
+            if (gameContainer.classList.contains('fullscreen')) {
+                setTimeout(() => {
+                    const height = window.innerHeight;
+                    gameContainer.style.height = height + 'px';
+                    gameIframe.style.height = height + 'px';
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>
